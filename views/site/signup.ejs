@@ -1,0 +1,52 @@
+<%- include('header') %> 
+    
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Signup</h2>
+            </div>
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/index">Home</a></li>
+                       <li class="breadcrumb-item active" aria-current="page">Signup</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+<div id="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <form class="form-horizontal" id="user-signup" action="/signup" method="POST">
+                    <h3>Create an account</h3>
+                    <div class="message"></div>
+                    <div class="form-group">
+                        <label for="staticEmail" class="col-form-label">Your Name</label>
+                        <input type="text" class="form-control" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="staticphone" class="col-form-label">Phone Number</label>
+                        <input type="number" class="form-control" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="staticEmail" class="col-form-label">Email Address</label>
+                        <input type="email" class="form-control" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="staticEmail" class="col-form-label">Password</label>
+                        <input type="password" class="form-control" name="password">
+                    </div>
+                    <input type="submit" class="btn mb-4" value="Signup">
+                    <span class="create-new">Already have an account? <a href="/login">Login</a></span>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') %> 

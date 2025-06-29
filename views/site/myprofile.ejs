@@ -1,0 +1,166 @@
+<%- include('header') %>
+
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>My Profile</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="main-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 mb-4 mb-md-0">
+                <div class="user-image">
+                    <img id="image" src="">
+                    <input type="file" name="user_img" onChange="readURL(this);">
+                    <input type="text" name="old_img" hidden value="">
+                    <button class="btn btn-block change-user-image">Change Profile Image</button>
+                    
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="user-info mb-5">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h3><%= user.username %></h3>
+                        <button class="btn align-self-center ShowProfile">Edit Profile</button>
+                    </div>
+                    <ul>
+                        <li><b>Profile Image :</b> <img src="/uploads/<%= user.image %>" width="70px" alt=""></li>
+                        <li><b>Email :</b> <%= user.email %></li>
+                        <li><b>Phone Number :</b> <%= user.phone %></li>
+                        <li><b>Address :</b> <%= user.address %></li>
+                        <li><b>City :</b> <%= cityName %></li>
+                        <li><b>State :</b> <%= stateName %></li>
+                        <li><b>Country :</b> <%= countryName %></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form id="EditProfile" action="/updateprofile" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Update Profile</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="offset-md-2 col-md-8">
+                                    <div class="message"></div>
+                                </div>
+                            </div>
+<div class="form-group row">
+  <label class="col-sm-4 col-form-label">Profile Image<span class="text-danger">*</span> :</label>
+  <div class="col-sm-8">
+    <input type="file" class="form-control" name="profileImage" />
+    <% if (user.profileImage) { %>
+  <img src="/uploads/<%= user.image %>" alt="Profile Image" style="width:100px; margin-top:10px;" />
+<% } %>
+  </div>
+</div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Your Name<span class="text-danger">*</span> :</label>
+                                <div class="col-sm-8">
+                                    <input type="type" class="form-control" name="username" value="<%= user.username %>">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Email<span class="text-danger">*</span> :</label>
+                                <div class="col-sm-8">
+                                    <input type="email" class="form-control" value="<%= user.email %>" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Phone<span class="text-danger">*</span> :</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="phone" value="<%= user.phone%>">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Country :</label>
+                                <div class="col-sm-8">
+                                    <select name="country" class="form-control country-select">
+                                         <option selected value="">Select The Country Name</option>
+                                         <% country.forEach(c => { %>
+                                            <option value="<%= c._id %>" <%= c._id.toString() === user.country?.toString() ? 'selected' : '' %>>
+                                                <%= c.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">State :</label>
+                                <div class="col-sm-8">
+                                    <select name="state" class="form-control state-select">
+                                        <option selected value="">Select The State Name</option>
+                                        <% state.forEach(s => { %>
+                                            <option value="<%= s._id %>" <%= s._id.toString() === user.state?.toString() ? 'selected' : '' %>>
+                                                <%= s.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">City :</label>
+                                <div class="col-sm-8">
+                                    <select name="city" class="form-control city-select">
+                                         <option selected value="">Select The City Name</option>
+                                         <% city.forEach(c => { %>
+                                            <option value="<%= c._id %>" <%= c._id.toString() === user.city?.toString() ? 'selected' : '' %>>
+                                                <%= c.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Address :</label>
+                                <div class="col-sm-8">
+                                    <textarea name="address" class="form-control"><%= user.address %></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn" name="update" value="Update"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+    }
+    $(document).ready(function () {
+    $('.ShowProfile').on('click', function () {
+        // Show the modal
+        $('#exampleModal').modal('show');
+    });
+});
+</script>
+
+<%- include('footer') %>

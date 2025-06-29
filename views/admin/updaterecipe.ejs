@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Recipe | Recipe Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <%- include('header') %>
+        <%- include('sidebar') %>
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>Edit Recipe</h1>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Edit Recipe</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </section>
+            <section class="content card">
+                <div class="container-fluid card-body">
+                    <!-- form start -->
+                    <form class="form-horizontal" id="editRecipe" action="/admin/recipe/<%= recipe._id %>" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <!-- column -->
+                            <div class="col-md-12">
+                                <!-- jquery validation -->
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Recipe Details</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 col-12">
+                                                <div class="form-group mb-4">
+                                                    <label>Recipe Name <small class="text-danger">*</small></label>
+                                                    <input type="text" class="form-control" name="name"
+                                                        value="<%= recipe.name %>" placeholder="Enter Recipe Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <div class="form-group mb-4">
+                                                    <label>Pre Time (In Minutes) <small class="text-danger">*</small></label>
+                                                    <input type="number" class="form-control" name="pre_time" value="<%= recipe.pre_time %>" placeholder="Enter Recipe Pre Time">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <div class="form-group mb-4">
+                                                    <label>Cook Time (In Minutes) <small class="text-danger">*</small></label>
+                                                    <input type="number" class="form-control" name="cook_time" value="<%= recipe.cook_time %>" placeholder="Enter Recipe Cook Time">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                              <div class="form-group mb-4">
+                                                <label>Recipe Slug <small class="text-danger">*</small></label>
+                                                <input type="text" class="form-control" name="slug" value="<%= recipe.slug %>" placeholder="Enter Recipe Slug Name">
+                                              </div>
+                                            </div>                                        
+                                            <div class="col-md-4 col-12 mb-4">
+                                                <label>Category <small class="text-danger">*</small></label>
+                                                <select name="category" class="form-control">
+                                                    <option disabled selected value="">Select The Category Name</option>
+                                                    <% categories.forEach(category=>{%>
+                                                        <option value="<%= category._id %>"<%=category._id.toString()===recipe.category.toString()? 'selected' : '' %>>
+                                                            <%= category.name %></option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 col-12 mb-4">
+                                                <label>Cuisine <small class="text-danger">*</small></label>
+                                                <select name="cuisine" class="form-control">
+                                                    <option disabled selected value="">Select The Cuisine Name</option>
+                                                        <% cuisines.forEach(cuisine=> { %><option value="<%= cuisine._id %>"<%=cuisine._id.toString() === recipe.cuisine.toString()? 'selected' : '' %>>
+                                                                <%= cuisine.name %></option>
+                                                            <% }) %>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 col-12 mb-4">
+                                                <label>Cooking Method <small class="text-danger">*</small></label>
+                                                <select name="cooking_method" class="form-control">
+                                                    <option disabled selected value="">Select The Cooking MethodName</option>
+                                                    <% cooking.forEach(cooking=> { %><option value="<%= cooking._id %>"<%=cooking._id.toString()===recipe.cooking_method.toString()? 'selected' : '' %>>
+                                                            <%= cooking.name %></option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4 col-sm-12">
+                                                <label>Image</label>
+                                                <div class="form-group"><input type="file" class="form-control" name="image"id="imageInput" onChange="readURL(this)">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <img id="image" src="/uploads/<%= recipe.image %>" alt="" width="80px" height="80px">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="">Recipe Gallery <small class="text-danger">*</small></label>
+                                                <div class="recipes-images1"></div>
+                                                <input type="text" hidden name="old_gallery" value="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-12">
+                                                <div class="form-group mb-4">
+                                                    <label>Total Serving <small class="text-danger">*</small></label>
+                                                    <input type="number" class="form-control" name="serving"
+                                                        value="<%= recipe.serving %>" placeholder="Enter Total Servings">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <div class="form-group mb-4">
+                                                    <label>Difficulty <small class="text-danger">*</small></label>
+                                                    <select name="difficulty" class="form-control">
+                                                        <option value="" selected disabled>Select Difficulty Recipe</option>    
+                                                        <option value="-1" <%= recipe.difficulty == "-1" ? "selected" : "" %>>Beginner</option>
+                                                        <option value="0" <%= recipe.difficulty == "0" ? "selected" : "" %>>Intermediate</option>
+                                                        <option value="1" <%= recipe.difficulty == "1" ? "selected" : "" %>>Expert</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <div class="form-group mb-4">
+                                                    <label> Video <small class="text-danger">*</small></label>
+                                                    <input type="text" name="video" value="<%= recipe.video  %>" class="form-control video_item" placeholder="YouTube Video ID">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-12">
+                                                <div class="form-group mb-4">
+                                                    <label>Description <small class="text-danger">*</small></label>
+                                                    <textarea class="textarea" name="description" value="" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"><%= recipe.description %></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!-- ingredients-->
+                            <div class="col-md-12">
+                                <div class="card card-info">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Ingredients</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                      <div class="ingredient-container">
+                                        <% if (recipe.ingredient && recipe.ingredient.length > 0) { %>
+                                          <% recipe.ingredient.forEach(function(item, index) { %>
+                                            <div class="row">
+                                              <div class="col-md-4 col-sm-6 col-12">
+                                                <div class="form-group">
+                                                  <label>Nutrition Value <span class="text-danger">*</span></label>
+                                                  <input type="text" name="ingredient[<%= index %>][name]" value="<%= item.name %>" class="form-control" >
+                                                </div>
+                                              </div>
+                                              <div class="col-md-4 col-sm-6 col-12">
+                                                <div class="form-group">
+                                                  <label>Nutrition Value <span class="text-danger">*</span></label>
+                                                  <input type="number" name="ingredient[<%= index %>][value]" value="<%= item.value %>" class="form-control" >
+                                                </div>
+                                              </div>
+                                              <div class="col-md-4 col-sm-6 col-12">
+                                                <div class="form-group">
+                                                  <label>Nutrition Unit <span class="text-danger">*</span></label>
+                                                  <select name="ingredient[<%= index %>][unit]" class="form-control">
+                                                    <% nutritionunit.forEach(function(unit) { %>
+                                                      <option value="<%= unit._id %>" <%= (unit._id.toString() === item.unit.toString()) ? 'selected' : '' %>><%= unit.unit %></option>
+                                                    <% }) %>
+                                                  </select>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          <% }) %>
+                                        <% } else { %>
+                                          <div class="row">
+                                            <div class="col-md-4">
+                                              <input type="text" name="ingredient[0][name]" class="form-control" placeholder="Name" />
+                                            </div>
+                                            <div class="col-md-4">
+                                              <input type="number" name="ingredient[0][value]" class="form-control" placeholder="Value" />
+                                            </div>
+                                            <div class="col-md-4">
+                                              <select name="ingredient[0][unit]" class="form-control">
+                                                <% nutritionunit.forEach(function(unit) { %>
+                                                  <option value="<%= unit._id %>"><%= unit.unit %></option>
+                                                <% }) %>
+                                              </select>
+                                            </div>
+                                          </div>
+                                        <% } %>
+                                      </div>
+                                      
+                                      
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                            <button type="button" class="btn btn-success add-ingredient"><i class="fa fa-plus"></i> Add Ingredient</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <!-- /.card-body -->
+                                </div>
+                            </div>
+
+                            <!-- cooking method -->
+                            <div class="col-md-12">
+                                <div class="card card-info">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Cooking Steps</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="cooking-container">
+                                          <% if (recipe.cooking_step && recipe.cooking_step.length > 0) { %>
+                                            <% recipe.cooking_step.forEach(function(step) { %>
+                                              <div class="row">
+                                                <div class="col-md-10 col-sm-8 col-12">
+                                                  <div class="form-group">
+                                                    <label>Cooking Step<span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="cooking[]" value="<%= step %>" required>
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-2 col-sm-4 col-12 mb-3 my-4">
+                                                  <button type="button" class="btn btn-danger delete-cooking">
+                                                    <i class="fa fa-times"></i> Delete
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            <% }); %>
+                                          <% } else { %>
+                                            <!-- Default one empty row if cooking steps are missing -->
+                                            <div class="row">
+                                              <div class="col-md-10 col-sm-8 col-12">
+                                                <div class="form-group">
+                                                  <label>Cooking Step<span class="text-danger">*</span></label>
+                                                  <input type="text" class="form-control" name="cooking[]" value="" required>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-2 col-sm-4 col-12 mb-3 my-4">
+                                                <button type="button" class="btn btn-danger delete-cooking">
+                                                  <i class="fa fa-times"></i> Delete
+                                                </button>
+                                              </div>
+                                            </div>
+                                          <% } %>
+                                        </div>
+                                      
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                            <button type="button" class="btn btn-success add-cooking">
+                                              <i class="fa fa-plus"></i> Add Cooking Step
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <!-- /.card-body -->
+                                </div>
+                            </div>
+
+                            <!-- nutritions -->
+                            <div class="col-md-12">
+                                <div class="card card-info">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Nutrition</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="nutrition-container">
+                                          <% if (recipe.nutrition && recipe.nutrition.length > 0) { %>
+                                          <% recipe.nutrition.forEach(function(item, index) { %>
+                                              <div class="row">
+                                                <!-- Nutrition Name -->
+                                                <div class="col-md-4 col-12">
+                                                  <div class="form-group">
+                                                    <label>Nutrition Name</label>
+                                                    <select name="nutrition[<%= index %>][name]" class="form-control">
+                                                      <% nutrition.forEach(function(nut) { %>
+                                                        <option value="<%= nut._id %>" <%= (nut._id.toString() === item.name.toString()) ? 'selected' : '' %>>
+                                                          <%= nut.name %>
+                                                        </option>
+                                                      <% }) %>
+                                                    </select>
+                                                  </div>
+                                                </div>
+                                      
+                                                <!-- Nutrition Value -->
+                                                <div class="col-md-4 col-sm-6 col-12">
+                                                  <div class="form-group">
+                                                    <label>Nutrition Value <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" name="nutrition[<%= index %>][value]" value="<%= item.value %>" required>
+                                                  </div>
+                                                </div>
+                                      
+                                                <!-- Nutrition Unit -->
+                                                <div class="col-md-4 col-sm-6 col-12">
+                                                  <div class="form-group">
+                                                    <label>Nutrition Unit <span class="text-danger">*</span></label>
+                                                    <select name="nutrition[<%= index %>][unit]" class="form-control" required>
+                                                      <% nutritionunit.forEach(function(unit) { %>
+                                                        <option value="<%= unit._id %>" <%= unit._id.toString() === item.unit.toString() ? 'selected' : '' %>>
+                                                          <%= unit.unit %>
+                                                        </option>
+                                                      <% }) %>
+                                                    </select>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            <% }) %>
+                                          <% } else { %>
+                                            <!-- Default empty row if no nutrition data exists -->
+                                            <div class="row">
+                                              <div class="col-md-4 col-12">
+                                                <div class="form-group">
+                                                  <label>Nutrition Name</label>
+                                                  <select name="nutrition[]" class="form-control" required>
+                                                    <option disabled selected value="">Select The Nutrition Name</option>
+                                                    <% if (nutrition && nutrition.length > 0) { %>
+                                                      <% nutrition.forEach(function(nutrition) { %>
+                                                        <option value="<%= nutrition._id %>"><%= nutrition.name %></option>
+                                                      <% }) %>
+                                                    <% } %>
+                                                  </select>
+                                                </div>
+                                              </div>
+                                      
+                                              <div class="col-md-4 col-sm-6 col-12">
+                                                <div class="form-group">
+                                                  <label>Nutrition Value <span class="text-danger">*</span></label>
+                                                  <input type="number" class="form-control" name="nutrition_val[]" value="" required>
+                                                </div>
+                                              </div>
+                                      
+                                              <div class="col-md-4 col-sm-6 col-12">
+                                                <div class="form-group">
+                                                  <label>Nutrition Unit <span class="text-danger">*</span></label>
+                                                  <select name="nutritionUnit[]" class="form-control" required>
+                                                    <option disabled selected value="">Select The Nutrition Unit Name</option>
+                                                    <% if (nutritionunit && nutritionunit.length > 0) { %>
+                                                      <% nutritionunit.forEach(function(unitItem) { %>
+                                                        <option value="<%= unitItem._id %>"><%= unitItem.unit %></option>
+                                                      <% }) %>
+                                                    <% } %>
+                                                  </select>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          <% } %>
+                                        </div>
+                                      
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                            <button type="button" class="btn btn-success add-nutrition">
+                                              <i class="fa fa-plus"></i> Add Nutrition
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <!-- /.card-body -->
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.row -->
+                        <input type="submit" class="btn btn-success" name="status" value="Publish">
+                        <input type="submit" class="btn btn-danger" name="status" value="Draft">
+                    </form> <!-- /.form start -->
+                </div><!-- /.container-fluid -->
+            </section>
+        </div>
+</body>
+</html>
+<%- include('footer') %>
+        <script>
+            $(function () {
+                $('#reservationdate').datetimepicker({
+                    format: 'L'
+                });
+
+                $('#reservationdate_1').datetimepicker({
+                    format: 'L'
+                });
+
+                $('#reservationdate_2').datetimepicker({
+                    format: 'L'
+                });
+
+                $('#reservationdate_3').datetimepicker({
+                    format: 'L'
+                });
+
+                //Money Euro
+                $('[data-mask]').inputmask()
+
+                $('.recipes-images').imageUploader({
+                    imagesInputName: 'gallery',
+                    'label': 'Drag and Drop'
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                bsCustomFileInput.init();
+            });
+
+
+            $(function () {
+                // Summernote
+                $('.textarea').summernote()
+            });
+        </script>
+        <script type="text/javascript">
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#image').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
+            }
+        </script>
+        <script>
+
+            // script for Add Ingredient
+            let count = 0;
+            $('.add-ingredient').click(function () {
+                var html = `<div class="row">
+                    <div class="col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label>Ingredient Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="ingredient[${count}][name]" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label>Value</label>
+                        <input type="number" class="form-control" name="ingredient[${count}][value]" required>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <select name="ingredient[${count}][unit]" class="form-control">
+                            <option disabled selected value="">Select Unit</option>`;
+                html += ` <% if (nutritionunit && nutritionunit.length > 0) { %>
+                    <% nutritionunit.forEach(function(nutritionunit) { %>
+                    html += <option value="<%= nutritionunit._id %>"><%= nutritionunit.unit %></option>;
+                     <% }) %>
+                  <% } %></select>
+                    </div>
+                </div>
+                    <div class="col-md-12 col-sm-6 col-12 mb-3 text-right">
+                        <button type="button" class="btn btn-danger delete-ingredient"><i class="fa fa-times"></i> Delete</button>
+                    </div>
+                </div>`;
+                $('.ingredient-container').append(html);
+                count++;
+            })
+
+            $(document).on('click', '.delete-ingredient', function () {
+                $(this).parent().parent().remove();
+                count--;
+            })
+
+
+            // script for Add Cooking Method
+            $('.add-cooking').click(function () {
+                var html = `<div class="row">
+                    <div class="col-md-10 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label>Cooking Step<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="cooking_step[]" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-4 col-12 mb-3 my-4">
+                        <button type="button" class="btn btn-danger delete-cooking"><i class="fa fa-times"></i> Delete</button>
+                    </div>
+                </div>`;
+                $('.cooking-container').append(html);
+            })
+
+            $(document).on('click', '.delete-cooking', function () {
+                $(this).parent().parent().remove();
+            })
+
+            // script for Add Nutrition
+            let i = 0;
+            $('.add-nutrition').click(function () {
+                var html = `<div class="row">
+                    <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label>Nutrition</label>
+                        <select name="nutrition[${i}][name]" class="form-control">
+                            <option disabled selected value="">Select The Nutrition Name</option>`;
+                html += ` <% if (nutrition && nutrition.length > 0) { %>
+    <% nutrition.forEach(function(nutrition) { %>
+      html += <option value="<%= nutrition._id %>"><%= nutrition.name %></option>;
+    <% }) %>
+  <% } %></select>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label>Nutrition Value</label>
+                        <input type="number" class="form-control" name="nutrition[${i}][value]">
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label>Nutrition Unit Name</label>
+                        <select name="nutrition[${i}][unit]" class="form-control">
+                            <option disabled selected value="">Select The Nutrition Unit Name</option>`;
+                html += ` <% if (nutritionunit && nutritionunit.length > 0) { %>
+    <% nutritionunit.forEach(function(nutritionunit) { %>
+      html += <option value="<%= nutritionunit._id %>"><%= nutritionunit.unit %></option>;
+    <% }) %>
+  <% } %></select>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-6 col-12 mb-3 text-right">
+                    <button type="button" class="btn btn-danger delete-nutrition"><i class="fa fa-times"></i> Delete</button>
+                </div>
+            </div>`;
+                $('.nutrition-container').append(html);
+                i++;
+            })
+
+            $(document).on('click', '.delete-nutrition', function () {
+                $(this).parent().parent().remove();
+            })
+        </script>

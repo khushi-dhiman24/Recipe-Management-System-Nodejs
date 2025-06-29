@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Home Setting | Recipe Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+</head>
+<body>
+  <%- include('header') %>
+    <%- include('sidebar') %>
+      <div class="message"></div>
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1>Edit Home Setting</h1>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                  <li class="breadcrumb-item active">Edit Home Setting</li>
+                </ol>
+              </div>
+            </div>
+          </div><!-- /.container-fluid -->
+        </section>
+        <section class="content card">
+    <div class="container-fluid card-body">
+        <!-- form start -->
+        <form class="form-horizontal" id="EditHomeSetting" action="/admin/homesetting/<%= home._id %>"  method="POST">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <input type="hidden" class="url" value="" >
+                    <!-- jquery validation -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Edit Home Setting</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group mb-4">
+                                        <label>Heading <small class="text-danger">*</small></label>
+                                        <input type="text" class="form-control" name="heading" value="<%= home.heading %>" placeholder="Enter heading Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group mb-4">
+                                        <label>Sub Heading </label>
+                                        <input type="text" class="form-control" name="sub_heading" value="<%= home.sub_heading %>" placeholder="Enter Sub Heading Name">
+                                        <small>(Leave the field empty if you want to hide this sub heading)</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group mb-4">
+                                        <label>Total Item <small class="text-danger">*</small></label>
+                                        <input type="number" class="form-control" name="total_item" value="<%= home.total_item %>" placeholder="Enter Total Itemes Number">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!--/.col -->
+            </div>
+            <!-- /.row -->
+            <input type="submit" class="btn btn-success" name ="status" value="Publish">
+            <input type="submit" class="btn btn-danger" name ="status" value="Draft">
+        </form> <!-- /.form start -->
+    </div><!-- /.container-fluid -->
+</section>
+</div>
+</body>
+</html>
+<%- include('footer') %> 
+

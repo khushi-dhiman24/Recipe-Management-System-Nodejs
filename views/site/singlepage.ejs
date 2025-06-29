@@ -1,0 +1,465 @@
+<%- include('header') %>
+  <div class="page-header">
+    <div class="container">
+      <div class="row">
+        <% if (recipes) { %>
+          <div class="col-12">
+            <h2>
+              <%= recipes.name %>
+            </h2>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index">Home</a></li>
+              <% if (recipes.category) { %>
+                <li class="breadcrumb-item">
+                  <a href="/category/<%= recipes.category.slug %>">
+                    <%= recipes.category.name %>
+                  </a>
+                  <% } else { %>
+                    <span>Uncategorized</span>
+                    <% } %>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  <%= recipes.name %>
+                </li>
+            </ol>
+          </div>
+          <% } %>
+      </div>
+    </div>
+  </div>
+  <div id="main-content" class="single-recipe-page">
+    <div class="container">
+      <div class="row">
+        <% if (recipes) { %>
+          <div class="col-md-8">
+            <img class="recipe-image" src="/uploads/<%= recipes.image %>" alt="<%= recipes.name %>">
+            <ul class="single-recipe-links">
+              <% if (recipes.category) { %>
+                <li><a href="/category/<%= recipes.category.slug %>">
+                    <%= recipes.category.name %>
+                  </a></li>
+                <% } else { %>
+                  <li><span>Uncategorized</span></li>
+                  <% } %>
+                    <% const isFavourited=favouriteRecipes.includes(recipes._id.toString()); %>
+                      <% if (user) { %>
+                        <% if (isFavourited) { %>
+                          <li>
+                            <a href="/favourite/remove/<%= recipes._id %>" data-id="<%= recipes._id %>"
+                              class="remove-favourite">
+                              <i class="fa fa-heart"></i> Remove Favourites
+                            </a>
+                          </li>
+                          <% } else { %>
+                            <li>
+                              <a href="/favourite/add/<%= recipes._id %>" class="add-favourite"
+                                data-id="<%= recipes._id %>">
+                                <i class="far fa-heart"></i> Add to Favourites
+                              </a>
+                            </li>
+                            <% } %>
+                              <% } else { %>
+                                <li><a href="/login"><i class="far fa-heart"></i> Add to Favourites</a></li>
+                                <% } %>
+            </ul>
+            <p><span style="color: rgba(0, 0, 0, 0.8); font-family: Inter,sans-serif;font-size: 17px;">
+                <%= recipes.description %>
+              </span></p>
+            <table class="table table-bordered mb-4">
+              <thead>
+                <tr align="center">
+                  <th scope="col">Cook Time</th>
+                  <th scope="col">Prepare Time</th>
+                  <th scope="col">Cooking Method</th>
+                  <th scope="col">Servings</th>
+                  <th scope="col">Difficulty</th>
+                  <th scope="col">Cuisine</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr align="center">
+                  <td>
+                    <%= recipes.cook_time %> mins
+                  </td>
+                  <td>
+                    <%= recipes.pre_time %> mins
+                  </td>
+                  <td>
+                    <%= recipes.cooking_method.name %>
+                  </td>
+                  <td>
+                    <%= recipes.serving %>
+                  </td>
+                  <td>
+                    <% if (recipes.difficulty=="-1" || recipes.difficulty==-1) { %>
+                      Beginner
+                      <% } else if (recipes.difficulty=="0" || recipes.difficulty==0) { %>
+                        Intermediate
+                        <% } else if (recipes.difficulty=="1" || recipes.difficulty==1) { %>
+                          Expert
+                          <% } else { %>
+                            Not specified
+                            <% } %>
+                  </td>
+                  <td><a href="/cuisine/<%= recipes.cuisine.slug %>" class="btn btn-sm btn-outline-success">
+                      <%= recipes.cuisine.name %>
+                    </a></td>
+                </tr>
+              </tbody>
+            </table>
+            <% if (isLoggedIn) { %>
+              <h3 class="sub-heading">Ingredients</h3>
+              <div class="recipe-ingredients mb-4">
+                <% if (recipes.ingredient && recipes.ingredient.length> 0) { %>
+                  <% recipes.ingredient.forEach((ingredient, index)=> { %>
+                    <div class="form-check mb-1">
+                      <input class="form-check-input" type="checkbox" id="ingredientCheck<%= index %>">
+                      <label class="form-check-label" for="ingredientCheck<%= index %>">
+                        <%= ingredient.name %>
+                      </label>
+                    </div>
+                    <% }) %>
+                      <% } else { %>
+                        <p>No ingredients listed.</p>
+                        <% } %>
+              </div>
+              <div class="content-detail">
+                <h3 class="sub-heading">Cooking Method</h3>
+                <ul class="cooking-steps mb-4">
+                  <% if (recipes.cooking_step && recipes.cooking_step.length> 0) { %>
+                    <% recipes.cooking_step.forEach((step)=> { %>
+                      <li class="mb-1"><i class="fas fa-angle-right"></i>
+                        <%= step %>
+                      </li>
+                      <% }) %>
+                        <% } else { %>
+                          <li>No cooking steps provided.</li>
+                          <% } %>
+                </ul>
+              </div>
+              <% } %>
+                <h3 class="sub-heading">Photo Gallery</h3>
+                <div class="popup-gallery recipe-gallery mb-4">
+                  <a href=""><img src="" width="150" height="150"></a>
+                </div>
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                  <li class="item">
+                    <a class="nav-link pill-link active" id="pills-video-tab" data-toggle="pill" href="#pills-video"
+                      role="tab" aria-controls="pills-video" aria-selected="false">Videos</a>
+                  </li>
+                  <li class="item">
+                    <a class="nav-link pill-link" id="pills-comment-tab" data-toggle="pill" href="#pills-comment"
+                      role="tab" aria-controls="pills-comment" aria-selected="false">Comments</a>
+                  </li>
+                  <li class="item">
+                    <a class="nav-link pill-link" id="pills-review-tab" data-toggle="pill" href="#pills-review"
+                      role="tab" aria-controls="pills-review" aria-selected="false">Reviews</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                  <div class="tab-pane fade show active" id="pills-video" role="tabpanel"
+                    aria-labelledby="pills-video-tab">
+                    <div class="row">
+                      <div class="col-12">
+                        <iframe width="100%" height="450" src="<%= video %>"></iframe>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="pills-comment" role="tabpanel" aria-labelledby="pills-comment-tab">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h3 class="sub-heading">Comments</h3>
+                      </div>
+                    </div>
+                    <% if (user) { %>
+                      <form class="pt-3" id="addComment" method="POST" action="/comment/<%= recipes._id %>">
+                        <div class="message"></div>
+                        <h4 class="sub-heading">Add Comment</h4>
+                        <input type="hidden" name="recipeId" value="<%= recipes._id %>">
+                        <input type="hidden" name="parentId" value="">
+                        <textarea class="form-control mb-3" name="comment"
+                          placeholder="Write your comment..."></textarea>
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                      </form>
+                      <% } else { %>
+                        <a href="/login" class="btn btn-primary">Login to comment</a>
+                        <% } %>
+                          <div class="comment-section mt-4">
+                            <% function render(comments) { %>
+                              <% comments.forEach(comment=> { %>
+                                <% if (comment.status) { %>
+                                  <div class="comment mb-3" style="margin-left:'40px' '0'">
+                                    <strong>
+                                      <%= comment.user?.username || 'Anonymous' %>
+                                    </strong>
+                                    <p>
+                                      <%= comment.comment %>
+                                    </p>
+                                    <div class="comment-footer text-right mt-2">
+                                      <span class="text-muted">
+                                        <%= new Date(comment.date).toLocaleDateString() %>
+                                      </span>
+                                    </div>
+                                    <% if (user) { %>
+                                      <button type="button" class="btn  reply-btn mt-2"
+                                        data-id="<%= comment._id %>">Reply</button>
+                                      <form class="reply-form mt-2" method="POST" action="/comment/<%= recipes._id %>"
+                                        style="display: none;">
+                                        <input type="hidden" name="recipeId" value="<%= recipes._id %>">
+                                        <input type="hidden" name="parentId" value="<%= comment._id %>">
+                                        <textarea class="form-control mb-2" name="comment"
+                                          placeholder="Write a reply..."></textarea>
+                                        <button type="submit" class="btn btn-secondary">Post Reply</button>
+                                      </form>
+                                      <% } %>
+                                        <% if (comment.replies && comment.replies.length> 0) { %>
+                                          <%= render(comment.replies) %>
+                                            <% } %>
+                                  </div>
+                                  <% } %>
+                                    <% }) %>
+                                      <% } %>
+                                        <%= render(comments) %>
+                          </div>
+                  </div>
+                  <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
+
+                    <div class="comment-widgets">
+                      <% if (reviews.length===0) { %>
+                        <p class="text-muted px-3"></p>
+                        <% } else { %>
+                          <% reviews.forEach(review=> { %>
+                            <% if (review.status) { %>
+                              <div class="d-flex flex-row comment-row mt-3 px-3">
+                                <div class="p-2">
+                                  <img src="/uploads/user/<%= review.user?.avatar || 'default.png' %>" alt="user"
+                                    width="50" class="rounded-circle">
+                                </div>
+                                <div class="comment-text w-100">
+                                  <h6 class="font-medium mb-1">
+                                    <%= review.user?.username || 'Anonymous' %>
+                                  </h6>
+                                  <span class="m-b-0 d-block">
+                                    <%= review.comment %>
+                                  </span>
+
+                                  <!-- Star Ratings -->
+                                  <div class="rated d-block mt-1">
+                                    <% for (let i=1; i <=5; i++) { %>
+                                      <% if (i <=review.rating) { %>
+                                        <label class="star-rating-complete text-warning">★</label>
+                                        <% } else { %>
+                                          <label class="star-rating-incomplete text-muted">☆</label>
+                                          <% } %>
+                                            <% } %>
+                                  </div>
+
+                                  <div class="comment-footer text-right mt-2">
+                                    <span class="text-muted">
+                                      <%= new Date(review.createdAt).toLocaleDateString() %>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <% } %>
+                                <% }) %>
+                                  <% } %>
+                    </div>
+                    <% if (user) { %>
+                      <form class="py-3 px-4 mt-4" id="addReview" style="box-shadow: 0 0 10px 0 #ddd;" method="POST"
+                        action="/review/<%= recipes._id %>" autocomplete="off">
+                        <h4 class="sub-heading mb-3">Post Review</h4>
+
+                        <input type="hidden" name="recipe_id" value="<%= recipes._id %>">
+                        <input type="hidden" name="user_id" value="<%= user._id %>">
+                        <div class="form-group rate mb-3">
+                          <% for (let i=5; i>= 1; i--) { %>
+                            <input type="radio" id="star<%= i %>" name="rating" value="<%= i %>">
+                            <label for="star<%= i %>" title="<%= i %> stars">
+                              <%= i %> stars
+                            </label>
+                            <% } %>
+                        </div>
+                        <div class="form-group">
+                          <textarea class="form-control h-auto" name="comment" rows="3"
+                            placeholder="Write your review..." maxlength="200" required></textarea>
+                        </div>
+                        <div class="text-right">
+                          <button class="btn btn-primary py-2 px-4">Submit</button>
+                        </div>
+                      </form>
+                      <% } else { %>
+                        <div class="px-3 mt-3">
+                          <a href="/login" class="btn btn-primary">Login to add review</a>
+                        </div>
+                        <% } %>
+                  </div>
+                </div>
+          </div>
+          <% } %>
+            <div class="col-md-4">
+              <% if (isLoggedIn) { %>
+                <div class="sidebar-widget">
+                  <h3 class="sub-heading">Nutrition Value</h3>
+                  <table class="table table-bordered">
+                    <% if (recipes.nutrition && recipes.nutrition.length> 0) { %>
+                      <% recipes.nutrition.forEach((item)=> { %>
+                        <tr>
+                          <td>
+                            <%= item.name %>
+                          </td>
+                          <td>
+                            <%= item.value %>
+                          </td>
+                          <td>
+                            <%= item.unit %>
+                          </td>
+                        </tr>
+                        <% }) %>
+                          <% } else { %>
+                            <tr>
+                              <td colspan="3">Nutrition information not available.</td>
+                            </tr>
+                            <% } %>
+                  </table>
+                </div>
+                <% } %>
+                  <div class="sidebar-widget">
+                    <h3 class="sub-heading">Rating</h3>
+                    <% if (reviews.length> 0) { %>
+                      <div class="rating-detail">
+                        <!-- Stars -->
+                        <ul class="rating list-inline mb-1">
+                          <% for (let i=1; i <=5; i++) { %>
+                            <% if (i <=Math.round(avgRating)) { %>
+                              <li class="fa fa-star active text-warning"></li>
+                              <% } else { %>
+                                <li class="fa fa-star text-muted"></li>
+                                <% } %>
+                                  <% } %>
+                        </ul>
+                        <!-- Text -->
+                        <span>
+                          Overall <%= avgRating.toFixed(1) %> (Out of 5) - (<%= reviews.length %> Reviews)
+                        </span>
+                      </div>
+                      <% } else { %>
+                        <div class="rating-detail">
+                          <span>No reviews yet</span>
+                        </div>
+                        <% } %>
+                  </div>
+                  <div class="sidebar-widget">
+                    <h3 class="sub-heading">Recent Recipes</h3>
+                    <% if (recentRecipes && recentRecipes.length> 0) { %>
+                      <% recentRecipes.forEach((recipe)=> { %>
+                        <div class="recipe-grid d-flex flex-row">
+                          <div class="recipe-img">
+                            <img src="/uploads/<%= recipe.image %>" alt="<%= recipe.name %>">
+                          </div>
+                          <div class="recipe-content align-self-center">
+                            <h4>
+                              <a href="/<%= recipes.category.slug %>/<%= recipe.slug %>">
+                                <%= recipe.name %>
+                              </a>
+                            </h4>
+                            <ul class="recipe-info">
+                              <% const matchedCategory=category.find(cat=> cat._id.toString() ===
+                                recipe.category.toString()); %>
+                                <li>
+                                  <% if (matchedCategory) { %>
+                                    <a href="/category/<%= matchedCategory.slug %>">
+                                      <%= matchedCategory.name %>
+                                    </a>
+                                    <% } else { %>
+                                      <span>Uncategorized</span>
+                                      <% } %>
+                                </li>
+                                <li><i class="far fa-clock"></i>
+                                  <%= parseInt(recipe.pre_time) + parseInt(recipe.cook_time) %> mins
+                                </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <% }) %>
+                          <% } else { %>
+                            <p>No recent recipes found.</p>
+                            <% } %>
+                  </div>
+            </div>
+      </div>
+    </div>
+  </div>
+  <%- include('footer') %>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const replyButtons = document.querySelectorAll('.reply-btn');
+
+        replyButtons.forEach(button => {
+          button.addEventListener('click', function () {
+            const commentId = this.getAttribute('data-id');
+            const replyForm = this.nextElementSibling;
+
+            if (replyForm && replyForm.classList.contains('reply-form')) {
+              replyForm.style.display = replyForm.style.display === 'none' || replyForm.style.display === '' ? 'block' : 'none';
+            }
+          });
+        });
+      });
+    </script>
+
+    <script>
+      document.querySelectorAll('.add-favourite').forEach(btn => {
+        btn.addEventListener('click', async function (e) {
+          e.preventDefault();
+          const recipeId = this.dataset.id;
+
+          if (!recipeId) {
+            console.error("Recipe ID is missing!");
+            return;
+          }
+
+          try {
+            const res = await fetch(`/favourite/add/${recipeId}`, {
+              method: 'POST',
+            });
+            const data = await res.json();
+            if (data.success) {
+              location.reload(); // or toggle UI
+            }
+          } catch (err) {
+            console.error("Error adding favourite:", err);
+          }
+        });
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.remove-favourite').forEach(button => {
+          button.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const recipeId = button.getAttribute('data-id');
+
+            try {
+              const res = await fetch(`/favourite/remove/${recipeId}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+
+              const result = await res.json();
+              if (result.success) {
+                // Optional: remove the recipe from DOM or reload page
+                location.reload();
+              } else {
+                alert('Failed to remove from favourites.');
+              }
+            } catch (err) {
+              console.error('Remove failed:', err);
+              alert('Error occurred');
+            }
+          });
+        });
+      });
+
+    </script>

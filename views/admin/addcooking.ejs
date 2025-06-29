@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Cooking Method Name | Recipe Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+</head>
+
+<body>
+  <%- include('header') %>
+    <%- include('sidebar') %>
+      <div class="message"></div>
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1>Add Cooking Method Name</h1>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                  <li class="breadcrumb-item active">Add Cooking Method Name</li>
+                </ol>
+              </div>
+            </div>
+          </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="card card-primary">
+                  <div class="card-header ">
+                    <h3 class="card-title">Add Cooking Method Name</h3>
+
+                  </div>
+                  <div class="card-body">
+                    <form class="form-horizontal" id="add-Cooking-method-name" action="/admin/cooking" method="POST">
+                      <div class="form-group">
+                        <label for="">Cooking Method Name</label>
+                        <input type="text" class="form-control Cooking Method Name" name="name" placeholder="Cooking Method Name" required>
+                      </div>
+                      <input type="submit" class="btn btn-success" name ="status" value="Publish">
+                      <input type="submit" class="btn btn-danger" name ="status" value="Draft">
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+</body>
+
+</html>
+<%- include('footer') %>

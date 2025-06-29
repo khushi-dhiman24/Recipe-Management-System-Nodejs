@@ -1,0 +1,60 @@
+<%- include('header') %>
+
+<!-- Page Header Start -->
+<div class="page-header mb-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>All Recipes</h2>
+            </div>
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">All Recipes</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div id="main-content">
+    <div class="container">
+        <div class="row">
+            <% allrecipe.forEach(function(recipe) { %>
+            <div class="col-lg-4 col-md-6">
+                <div class="recipe-grid">
+                    <div class="recipe-img">
+                            <img src="/uploads/<%= recipe.image %>" alt="<%= recipe.name %>">
+                    </div>
+                    <div class="recipe-content">
+                        <% const cat = category.find(c => c._id.toString() === recipe.category.toString()); %>
+                        <h4><a href="/<%= cat ? cat.slug : 'uncategorized' %>/<%= recipe.slug %>"><%= recipe.name %></a></h4>
+                        <ul class="recipe-info">
+                                <% const matchedCategory = category.find(cat => cat._id.toString() === recipe.category.toString()); %>
+                                <li>
+                                    <% if (matchedCategory) { %>
+                                        <a href="/category/<%= matchedCategory.slug %>"><%= matchedCategory.name %></a>
+                                        <% } else { %>
+                                            <span>Uncategorized</span>
+                                            <% } %>
+                                            </li>
+                                <li><i class="far fa-clock"></i> <%= parseInt(recipe.pre_time) + parseInt(recipe.cook_time) %> mins</li>
+                            </ul>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+
+            <!-- Pagination placeholder -->
+            <div class="col-12">
+                <!-- If you're using a pagination package or logic in your backend, render here -->
+                <!-- Example:  or loop pagination manually -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('footer') %>

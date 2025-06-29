@@ -1,0 +1,78 @@
+<div id="footer">
+    <div class="container-fluid footer-logobar mb-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <% general.forEach(function(general) { %>
+                <a href="" class="footer-logo">
+                    <img src="/uploads/<%= general.image %>" alt="<%= general.com_name %>" width="100px">
+                </a>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 col-12 align-self-center text-md-left text-center mb-2 mb-md-0">
+                <!-- Dynamically add company name and description -->
+                <p class="copyright-text"><%= general.length > 0 ? general[0].copyright : 'Default Copyright Text' %></p>
+            </div>
+            <div class="col-md-4 col-12 text-center mb-2 mb-md-0">
+                <ul class="social-links">
+                   <% social.forEach(function(social) { %>
+                        <li><a href="<%= social.facebook %>" target="_blank"><i class="fab fa-facebook"></i></a></li>
+                        <li><a href="<%= social.twitter %>" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="<%= social.instagram %>" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="<%= social.youtube %>" target="_blank"><i class="fab fa-youtube"></i></a></li>
+                    <% }); %>
+                </ul>
+            </div>
+            <div class="col-md-4 col-12 align-self-center">
+                <ul class="footer-pages-links text-md-right text-center">
+                    <!-- You can add footer pages links here -->
+                    <li><a href="/terms-and-conditions">Terms And Conditions </a></li>
+                    <li><a href="/privacy-policy">Privacy policy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+   <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Popper -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- <script src="/js/jquery-3.4.1.min.js"></script> -->
+<!-- <script src="/js/popper.min.js"></script> -->
+<!-- <script src="/lib/owlcarousel/owl.carousel.min.js"></script> -->
+<!-- <script src="/js/bootstrap.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script> -->
+<!-- <script src="/js/plugins.js"></script> -->
+<!-- <script src="/js/jquery.validate.min.js"></script> -->
+<!-- Magnific Popup core JS file -->
+<!-- <script src="/js/jquery.magnific-popup.js"></script> -->
+<!-- <script src="/js/action.js"></script> -->
+<!-- <script>
+    $(document).ready(function() {
+	$('.popup-gallery').magnificPopup({
+		delegate: 'a',
+		type: 'image',
+		tLoading: 'Loading image #%curr%...',
+		mainClass: 'mfp-img-mobile',
+		gallery: {
+			enabled: true,
+			navigateByImgClick: true,
+			preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+		},
+		image: {
+			tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+			// titleSrc: function(item) {
+			// 	return item.el.attr('title') + '<small>by Marsel Van Oosten</small>';
+			// }
+		}
+	});
+   
+});
+</script>    -->
+</body>
+</html>

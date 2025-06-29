@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Management</title>
+</head>
+<body>
+    <%- include('header') %> 
+<!-- Banner Start -->
+<% banner.forEach(function(banner) { %>
+    <div id="banner" style="background-image: url('/uploads/<%= banner.image %>')">
+        <h1><%= banner.title %></h1>
+        <h3><%= banner.sub_title %></h3>
+    </div>
+<% }); %>
+<!-- Banner End -->
+
+<!-- category Start-->
+<% home.forEach(value => { %>
+    <% if (value.section_name === "categories" && category.length > 0) { %>
+<div id="category-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h3><%= value.heading %></h3>
+                <span><%= value.sub_heading %></span>
+            </div>
+            <% category.forEach(category => { %>
+            <div class="col-lg-2 col-md-3 col-sm-6 col-6">
+                <div class="category-box d-flex flex-row">
+                    <a href="/category/<%= category.slug %>" class="category-img"><img src="/uploads/<%= category.image %>" alt="<%= category.name %>"></a>
+                    <h4 class="align-self-center"><a href="/category/<%= category._id %>"></a><%= category.name %></a></h4>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+<% } %>
+<% }) %>
+
+
+<!-- Cuisine Start-->
+ <% home.forEach(value => { %>
+    <% if (value.section_name === "cuisines" && cuisine.length > 0) { %>
+<div id="cuisine-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 align-self-center text-center text-md-left mb-3 mb-md-0">
+                <h2><%= value.heading %></h2>
+                <span class="section-description"><%= value.sub_heading %></span>
+            </div>
+            <div class="col-md-8 row pr-0">
+                <% cuisine.forEach(cuisine=> { %>
+                <div class="col-lg-3 col-md-4 col-sm-4">
+                    <a href="/cuisine/<%= cuisine.slug %>" class="cuisine-box d-flex flex-column justify-content-center">
+                        <span class="title"><%= cuisine.name %></span>
+                        <span>Recipes</span>
+                    </a>
+                </div>               
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<% }) %>
+
+<!-- latest section Start-->
+ <% home.forEach(value => { %>
+    <% if (value.section_name === "Latest Recipes" && recipe.length > 0) { %>
+<div id="latest-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 d-flex flex-row justify-content-between">
+                <div class="mb-4">
+                    <h3><%= value.heading %></h3>
+                    <span><%= value.sub_heading %></span>
+                </div>
+                <a href="/allrecipe" class="align-self-center view-all">View All Recipes <i class="fa fa-arrow-right"></i></a>
+            </div>
+            <% recipe.forEach((recipe, index) => { 
+                    const className = (index === 0) ? 'col-lg-8 col-md-12' : 'col-lg-4 col-md-6';
+                    const innerClass = (index === 0) ? 'd-flex flex-row' : '';
+                %>
+            <div class="<%= className %>">
+                <div class="recipe-grid <%= innerClass %>">
+                    <div class="recipe-img">
+                        <img src="/uploads/<%= recipe.image %>" alt="<%= recipe.name %>">
+                    </div>
+                    <div class="recipe-content">
+                        <% const cat = category.find(c => c._id.toString() === recipe.category.toString()); %>
+                        <h4><a href="/<%= cat ? cat.slug : 'uncategorized' %>/<%= recipe.slug %>"><%= recipe.name %></a></h4>
+                        <% if (index === 0) { %>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, perferendis?</p>
+                            <% } %>
+                        <ul class="recipe-info">
+                                <% const matchedCategory = category.find(cat => cat._id.toString() === recipe.category.toString()); %>
+                                <li>
+                                    <% if (matchedCategory) { %>
+                                        <a href="/category/<%= matchedCategory.slug %>"><%= matchedCategory.name %></a>
+                                        <% } else { %>
+                                            <span>Uncategorized</span>
+                                            <% } %>
+                                            </li>
+                                <li><i class="far fa-clock"></i> <%= parseInt(recipe.pre_time) + parseInt(recipe.cook_time) %> mins</li>
+                            </ul>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+<% } %>
+<% }) %>
+
+
+<% home.forEach(value => { %>
+  <% if (value.section_name === "Favourites" && recipe.length > 0) { %>
+<div id="most-favourite-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h3><%= value.heading %></h3>
+                <span><%= value.sub_heading %></span>
+            </div>
+            <% recipe.forEach((recipe, index) => {
+                const matchedCategory = category.find(cat => cat._id.toString() === recipe.category.toString()); %>
+            <div class="col-md-4">
+                <div class="fav-recipe-grid">
+                    <div class="recipe-img">
+                            <img src="/uploads/<%= recipe.image %>" alt="">
+                    </div>
+                    <div class="recipe-content d-flex flex-column">
+                        <div class="mt-auto">
+                            <% const cat = category.find(c => c._id.toString() === recipe.category.toString()); %>
+                        <h4><a href="/<%= cat ? cat.slug : 'uncategorized' %>/<%= recipe.slug %>"><%= recipe.name %></a></h4>
+                             <ul class="recipe-info">
+                                <li>
+                        <% if (matchedCategory) { %>
+                          <a href="/category/<%= matchedCategory.slug %>"><%= matchedCategory.name %></a>
+                        <% } else { %>
+                          <span>Uncategorized</span>
+                        <% } %>
+                      </li>
+                      <li><i class="far fa-clock"></i> <%= parseInt(recipe.pre_time) + parseInt(recipe.cook_time) %> mins</li>
+                    </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+  <% } %>
+<% }) %>
+
+</body>
+</html>
+<%- include('footer') %> 

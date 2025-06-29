@@ -1,0 +1,66 @@
+<%- include('header') %>
+
+<!-- Page Header Start -->
+<div class="page-header category-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="category-info d-flex flex-row">
+                    <% if (categories) { %>
+                    <div class="category-img">
+                            <img src="/uploads/<%= categories.image %>" alt="<%= categories.name %>">
+                    </div>
+                    <div class="category-content align-self-center">
+                        <h2><%= categories.name %></h2>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/index">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"><%= categories.name %></li>
+                        </ol>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Page Header End -->
+ <div id="main-content">
+    <div class="container">
+        <div class="row">
+            <% if (allRecipe.length > 0) { %>
+                <% allRecipe.forEach(recipe => { %>
+            <div class="col-lg-4 col-md-6">
+                <div class="recipe-grid">
+                    <div class="recipe-img">
+                        <img src="/uploads/<%= recipe.image %>" alt="<%= recipe.name %>">
+                    </div>
+                    <div class="recipe-content">
+                        <h4><a href="/<%= categories.slug %>/<%= recipe.slug %>"><%= recipe.name %></a></h4>
+                        <ul class="recipe-info">
+                                <% const matchedCategory = category.find(cat => cat._id.toString() === recipe.category.toString()); %>
+                                <li>
+                                    <% if (matchedCategory) { %>
+                                        <a href="/category/<%= matchedCategory.slug %>"><%= matchedCategory.name %></a>
+                                        <% } else { %>
+                                            <span>Uncategorized</span>
+                                            <% } %>
+                                            </li>
+                                <li><i class="far fa-clock"></i> <%= parseInt(recipe.pre_time) + parseInt(recipe.cook_time) %> mins</li>
+                            </ul>
+                    </div>
+                </div>
+            </div>
+                <% }) %>
+                <% }  %>
+                <% if (allRecipe.length === 0) { %>
+                    <div class="col-12 text-center">
+                        <h3 class="sub-heading">No Recipes Found</h3>
+                    </div>
+                    <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('footer') %>
+
